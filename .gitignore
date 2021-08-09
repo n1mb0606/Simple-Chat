@@ -105,3 +105,6 @@ dist
 
 # Test code
 test.js
+
+# React Build directory
+my-app/build
