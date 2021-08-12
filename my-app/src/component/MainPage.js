@@ -1,7 +1,5 @@
 import React from 'react';
-import io from 'socket.io-client'
-
-var socket = io();
+import socket from '../socket'
 
 class ChatMain extends React.Component{
   constructor(props){
@@ -12,9 +10,9 @@ class ChatMain extends React.Component{
     
   }
   componentDidMount(){
-      socket.on('chat message', function(msg) {
+      socket.on('chat message', function(msg_obj) {
         var item = document.createElement('li');
-        item.textContent = msg;
+        item.textContent = msg_obj.name + ': ' + msg_obj.msg;
         document.getElementById('messages').appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
     });
@@ -38,6 +36,7 @@ class ChatMain extends React.Component{
             <input id="input" value={this.state.msg} onChange={this.handleChange} autoComplete="off"/>
             <button type="submit">Send</button>
           </form>
+          
         </ul>
       </div>
     );

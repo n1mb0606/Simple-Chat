@@ -3,6 +3,6 @@ var router = express.Router();
 
 
 router.get('/', function(req, res){
-    res.sendFile(__dirname + '\\index.html');
+    res.send('NOT FOUND');
 })
 module.exports = router;
