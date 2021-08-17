@@ -71,6 +71,10 @@ class RoomSelect extends React.Component{
         this.submitRoom = this.submitRoom.bind(this);
     }
     componentDidMount() {
+        // const tst = document.createElement('li')
+        // tst.innerText = 'hihi';
+        // tst.setAttribute('align', 'right')
+        // document.getElementById('test').appendChild(tst);
         socket.on('room', (lgdin) => {
             this.setState({lgdin: lgdin});
             if(this.state.lgdin)
@@ -105,7 +109,9 @@ class RoomSelect extends React.Component{
     render(){
         return(
             <div className="container-xl"> 
-                     
+                <div id='test'>
+
+                </div>
                 <Container className="" id="room_input"  onSubmit={this.submitRoom} >
                     <Form>
                     <Row className="mt-5" align="center">

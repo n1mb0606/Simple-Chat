@@ -71,11 +71,13 @@ io.on('connection', (socket) => {
         const userName = findUsername(socket.id);
         const messageObject = {
             name: userName,
-            message: msg
+            message: msg,
         }
+        io.to(socket.id).emit('chat_message', messageObject, true);
         const participatingRoom = Array.from(socket.rooms)[1];
         console.log("rooms", participatingRoom);
-        io.to(Array.from(socket.rooms)[1]).emit('chat_message', messageObject);
+
+        io.to(participatingRoom).except(socket.id).emit('chat_message', messageObject, false);
         console.log(`${messageObject.username} : ${messageObject.message}`);
     })
 
