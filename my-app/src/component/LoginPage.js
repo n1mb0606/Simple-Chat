@@ -9,28 +9,23 @@ import{
     Col,
     Row 
 } from 'react-bootstrap';
-// import { io }from 'socket.io-client'
-// const URL = "http://localhost:3002"
-// const socket = io(URL,{
-//     autoConnect: false,
-// });
 import socket from '../socket';
-socket.connect();
+
 class LoginPage extends React.Component{
     constructor(props){
         super(props);
         this.SubmitUsername = this.SubmitUsername.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.state = {username: ''};
+        this.state = {usename: ''};
     }
     SubmitUsername(e){
         e.preventDefault();
         if(this.state.username){
-            const user = {
-                username: this.state.username,
+            const user_obj = {
+                userName: this.state.username,
                 id: socket.id
             }
-            socket.emit('user', user);
+            socket.emit('user_name', user_obj);
             this.props.loginChecker();
             this.setState({username: ''});
         }

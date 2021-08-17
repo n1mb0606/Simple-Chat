@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
+
 
 const app = express();
 const httpServer = require('http').createServer(app);
@@ -14,8 +16,10 @@ const io = require('socket.io')(httpChatServer, {
         origin: "http://localhost:8080"
     }
 });
-
+const jwt = require('jsonwebtoken');
 var USERLIST = [];
+var ROOMLIST = [];
+//var ROOMSECRET = '';
 // app.use('/api',api);
 // app.get('/api', (req, res) => {
 //     console.log('GET')
@@ -23,61 +27,114 @@ var USERLIST = [];
 // app.post('/api', (req, res) => {
 //     console.log('POST');
 // })
-function FindUsrName(id) {
+
+function findUsername(id) {
     for(let i = 0; i < USERLIST.length; i++){
         if(USERLIST[i].id == id){
-            return USERLIST[i].name;
+            return USERLIST[i].userName;
         }
     }
     return 'Player';
 }
+function FindRoomSecret(roomn, roomp) {
+    for(let i = 0; i < ROOMLIST.length; i++) {
+        if(ROOMLIST[i].roomcode == roomn){
+            if(ROOMLIST[i].roompw == roomp){
+                return ROOMLIST[i].roomsecret
+            }
+        }
+    }
+    return false;
+}
 app.use(express.static(path.join(__dirname, '../my-app/build')));
+app.use(function(req, res) {
+    res.status(404).send('404 NOT FOUND');
+})
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../my-app/build/index.html'))
 });
 app.get('/chat', (req, res) => {
     res.sendFile(path.join(__dirname, '../my-app/build/index.html'))
 });
+app.get('/room', (req, res) => {
+    res.sendFile(path.join(__dirname, '../my-app/build/index.html'))
+})
 
 io.on('connection', (socket) => {
+    console.log(socket.handshake.auth);
     console.log('a user connected');
     socket.onAny((event, ...args) => {
         console.log(event, args);
     });
 
-    socket.on('chat message', (msg) => {
-        const usrname = FindUsrName(socket.id);
-        const msg_obj = {
-            name: usrname,
-            msg: msg
+    socket.on('chat_message', (msg) => {
+        const userName = findUsername(socket.id);
+        const messageObject = {
+            name: userName,
+            message: msg
         }
-        io.emit('chat message', msg_obj);
-        //socket.broadcast.emit('hi');
-        console.log('msg : ', msg);
+        const participatingRoom = Array.from(socket.rooms)[1];
+        console.log("rooms", participatingRoom);
+        io.to(Array.from(socket.rooms)[1]).emit('chat_message', messageObject);
+        console.log(`${messageObject.username} : ${messageObject.message}`);
     })
 
-    socket.on('user', (user) => {
-        const username = user.username;
-        const socketid = user.id;
+    socket.on('user_name', (user_obj) => {
+        const userName = user_obj.userName;
+        const socketId = user_obj.id;
 
-        //create user
+        // //create user
         USERLIST.push({
-            id: socketid,
-            name: username
+            id: socketId,
+            userName: userName
         });
 
-        broadcast_msg = {
+        broadcastMessage = {
             name: '관리자',
-            msg: username + '님이 입장하셨습니다.'
+            msg: userName + '님이 입장하셨습니다.'
         }
-        socket.broadcast.emit('chat message', broadcast_msg);
-        io.emit('user', );
-        console.log(`username: ${username}`);
-        console.log(`socketid: ${socketid}`);
+        //socket.to(Array.from(socket.rooms)).broadcast.emit('chat message', broadcastMessage);
+        //io.emit('user', ); 중복검사할거면 추가
+        // console.log(`username: ${userName}`);
 
-        for(let i = 0; i < USERLIST.length; i++){
-            console.log(USERLIST[i]);
+        // console.log(`socketid: ${socketId}`);
+
+        console.log(USERLIST);
+    })
+    socket.on('room', (user_obj) => {
+        //const userInfo = socket.handshake.auth;
+        const userName = user_obj.username;
+        const userId = user_obj.id;
+        const roomCode = user_obj.roomcode;
+        const roomPassword = user_obj.roompw;
+
+        const roomSecret = FindRoomSecret(roomCode, roomPassword);
+        //console.log('userinfo',userInfo.rc, userinfo.rp);
+        if(roomSecret) {
+            socket.join(roomSecret);
+            socket.emit('room', true);
+            
+            USERLIST.push({
+                id: userId,
+                userName: userName
+            });
+            
+            console.log('true');
         }
+        else{
+            socket.emit('room', false);
+            console.log('false');
+        }
+    })
+    socket.on('create_room', () => {
+        const roomCode = crypto.randomBytes(8).toString('hex');
+        const roomPassword = crypto.randomBytes(8).toString('hex');
+        const roomSecret = crypto.randomBytes(8).toString('hex');
+        ROOMLIST.push({roomcode: roomCode, 
+                       roompw: roomPassword, 
+                       roomsecret: roomSecret});
+        console.log(ROOMLIST);
+        io.emit('create_room', roomCode, roomPassword);
     })
     socket.on('disconnect', () => {
         //delete user

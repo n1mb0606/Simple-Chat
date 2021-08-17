@@ -3,35 +3,30 @@ import './App.css';
 import React from 'react';
 import {
   BrowserRouter as Router,
-  StaticRouter,
   Switch,
   Route,
-  Redirect,
-  Link
+  Redirect
 } from "react-router-dom"
 import ChatMain from './component/MainPage';
-import LoginPage from './component/LoginPage'
+import RoomManage from './component/RoomSelect';
 
-class Login extends React.Component{
+class Room extends React.Component{
   constructor(props){
     super(props);
-    this.checkLoginstate = this.checkLoginstate.bind(this);
-    this.state = {chklogin: false};
+    this.checkRoomselected = this.checkRoomselected.bind(this);
+    this.state = {room_selected: false};
   }
-  checkLoginstate(){
-    this.setState({chklogin: true});
+  checkRoomselected(){
+    this.setState({room_selected: true});
   }
-  name 
   render(){
     return(
-      this.state.chklogin ?
-        <Redirect to="/chat"/>
-        :<LoginPage loginChecker={this.checkLoginstate}/>
-      );
-    }
-  
+      this.state.room_selected ?
+        <Redirect to="/chat" />
+        :<RoomManage roomSelecter={this.checkRoomselected} />
+    )
+  }
 }
-
 function App() {
   return (
     <Router>
@@ -41,7 +36,7 @@ function App() {
             <ChatMain />
           </Route>
           <Route path="/">
-            <Login />
+            <Room />
           </Route>
         </Switch>
       </div>
