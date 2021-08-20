@@ -8,7 +8,7 @@ import {
   Redirect
 } from "react-router-dom"
 import ChatMain from './component/MainPage';
-import RoomManage from './component/RoomSelect';
+import RoomManage from './component/RoomManage';
 
 class Room extends React.Component{
   constructor(props){
@@ -29,18 +29,20 @@ class Room extends React.Component{
 }
 function App() {
   return (
-    <Router>
-      <div>
-        <Switch>
-          <Route path="/chat">
-            <ChatMain />
-          </Route>
-          <Route path="/">
-            <Room />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <div>
+      <Router>
+        <div>
+          <Switch>
+            <Route path="/chat">
+              <ChatMain />
+            </Route>
+            <Route path="/">
+              <Room />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </div>
   );
 }
 

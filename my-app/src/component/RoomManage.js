@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import{ 
     Button,
@@ -50,8 +50,8 @@ class RoomCreate extends React.Component{
                             </InputGroup>
                         </Col>
                     </Row>
-                    <Row className="mt-5" align="center">
-                        <Col>
+                    <Row className="mt-4" align="center">
+                        <Col className="d-grid gap-2">
                             <Button type="submit" size="lg">Create Room</Button>
                         </Col>
                     </Row>
@@ -71,10 +71,6 @@ class RoomSelect extends React.Component{
         this.submitRoom = this.submitRoom.bind(this);
     }
     componentDidMount() {
-        // const tst = document.createElement('li')
-        // tst.innerText = 'hihi';
-        // tst.setAttribute('align', 'right')
-        // document.getElementById('test').appendChild(tst);
         socket.on('room', (lgdin) => {
             this.setState({lgdin: lgdin});
             if(this.state.lgdin)
@@ -108,10 +104,7 @@ class RoomSelect extends React.Component{
     }
     render(){
         return(
-            <div className="container-xl"> 
-                <div id='test'>
-
-                </div>
+            <div className="container-xl">
                 <Container className="" id="room_input"  onSubmit={this.submitRoom} >
                     <Form>
                     <Row className="mt-5" align="center">
@@ -167,8 +160,8 @@ class RoomSelect extends React.Component{
                     <Row className="justify-content-md-center mt-1" md="1" align="center">
                         
                     </Row>
-                    <Row className="mt-1" align="center">
-                        <Col>
+                    <Row className="mt-4" align="center">
+                        <Col className="d-grid gap-2">
                             <Button type="submit" size="lg">Login</Button>
                         </Col>
                     </Row>

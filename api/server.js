@@ -70,14 +70,14 @@ io.on('connection', (socket) => {
     socket.on('chat_message', (msg) => {
         const userName = findUsername(socket.id);
         const messageObject = {
+            id: crypto.createHash('sha512').update(socket.id).digest('hex'),
             name: userName,
-            message: msg,
+            message: msg
         }
-        io.to(socket.id).emit('chat_message', messageObject, true);
         const participatingRoom = Array.from(socket.rooms)[1];
         console.log("rooms", participatingRoom);
 
-        io.to(participatingRoom).except(socket.id).emit('chat_message', messageObject, false);
+        io.to(participatingRoom).emit('chat_message', messageObject);
         console.log(`${messageObject.username} : ${messageObject.message}`);
     })
 
