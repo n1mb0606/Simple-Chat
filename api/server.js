@@ -80,29 +80,6 @@ io.on('connection', (socket) => {
         io.to(participatingRoom).emit('chat_message', messageObject);
         console.log(`${messageObject.username} : ${messageObject.message}`);
     })
-
-    socket.on('user_name', (user_obj) => {
-        const userName = user_obj.userName;
-        const socketId = user_obj.id;
-
-        // //create user
-        USERLIST.push({
-            id: socketId,
-            userName: userName
-        });
-
-        broadcastMessage = {
-            name: '관리자',
-            msg: userName + '님이 입장하셨습니다.'
-        }
-        //socket.to(Array.from(socket.rooms)).broadcast.emit('chat message', broadcastMessage);
-        //io.emit('user', ); 중복검사할거면 추가
-        // console.log(`username: ${userName}`);
-
-        // console.log(`socketid: ${socketId}`);
-
-        console.log(USERLIST);
-    })
     socket.on('room', (user_obj) => {
         //const userInfo = socket.handshake.auth;
         const userName = user_obj.username;
@@ -127,6 +104,9 @@ io.on('connection', (socket) => {
             socket.emit('room', false);
             console.log('false');
         }
+        //Join alert
+
+
     })
     socket.on('create_room', () => {
         const roomCode = crypto.randomBytes(8).toString('hex');
