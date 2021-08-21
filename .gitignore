@@ -108,3 +108,6 @@ test.js
 
 # React Build directory
 my-app/build
+
+# .vscode
+.vscode
