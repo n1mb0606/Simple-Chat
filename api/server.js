@@ -106,7 +106,6 @@ io.on('connection', (socket) => {
         }
         //Join alert
         
-
     })
     socket.on('create_room', () => {
         const roomCode = crypto.randomBytes(8).toString('hex');

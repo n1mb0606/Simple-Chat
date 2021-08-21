@@ -7,7 +7,9 @@
 
 
 #user_input {height: 440; justify-content: space-around;}
-
+Button:active Button:focus {
+  box-shadow: none;
+}
 
 Form.form{
   background-color: whitesmoke;

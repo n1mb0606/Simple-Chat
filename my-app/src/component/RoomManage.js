@@ -18,6 +18,8 @@ class RoomCreate extends React.Component{
     constructor(props){
         super(props);
         this.submitRoomCreate = this.submitRoomCreate.bind(this);
+        this.copyInnertext = this.copyInnertext.bind(this);
+        this.test = this.test.bind(this);
         this.state = { roomcode : '', roompw : ''};
     }
     componentDidMount(){
@@ -29,6 +31,16 @@ class RoomCreate extends React.Component{
         e.preventDefault();
         socket.emit('create_room');
     }
+    copyInnertext(id) {
+        const val = document.getElementById(id).value;
+        if(val){
+            navigator.clipboard.writeText(val);
+        }
+    }
+    test(e) {
+        console.log(document.getElementById("assignedrc").value);
+        console.log(e.target);
+    }
     render(){
         return(
             <div className="mb-5">
@@ -38,7 +50,8 @@ class RoomCreate extends React.Component{
                         <Col>
                             <InputGroup size="lg">
                                 <InputGroup.Text>Roomcode</InputGroup.Text>
-                                <Form.Control type="text" value={this.state.roomcode} readOnly />                            
+                                <Form.Control id="assignedrc" type="text" value={this.state.roomcode} readOnly />                            
+                                <Button variant="outline-primary" onClick={() => {this.copyInnertext("assignedrc")}}>COPY</Button>
                             </InputGroup>
                         </Col>
                     </Row>
@@ -46,7 +59,8 @@ class RoomCreate extends React.Component{
                         <Col>
                             <InputGroup size="lg">
                                 <InputGroup.Text>Password</InputGroup.Text>
-                                <Form.Control type="text" value={this.state.roompw} readOnly />                            
+                                <Form.Control id="assignedrp" type="text" value={this.state.roompw} readOnly />    
+                                <Button variant="outline-primary" onClick={() => {this.copyInnertext("assignedrp")}}>COPY</Button>                        
                             </InputGroup>
                         </Col>
                     </Row>
