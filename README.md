@@ -48,7 +48,6 @@
 # Simple-Chat
 
 
-
 <!-- TABLE OF CONTENTS
 <details open="open">
   <summary>Table of Contents</summary>
@@ -75,8 +74,6 @@
   </ol>
 </details> -->
 
-
-<br />
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
@@ -90,7 +87,7 @@ React와 Node js를 이용한 간단한 채팅 앱
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples. -->
 * [NodeJS](https://nodejs.org/en/)
 * [React](https://reactjs.org/)
-* [socket.io](https://socket.io/)
+* [Socket.io](https://socket.io/)
 
 <!-- GETTING STARTED -->
 <!-- ## Getting Started
@@ -115,7 +112,29 @@ This is an example of how to list things you need to use the software and how to
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-1. 
+1. 서버 실행
+```sh
+  cd Simple-Chat/api
+  node server.js
+```
+2. 채팅 방 생성
+
+* 로컬 접속
+<br/>
+
+[http://localhost:8080](http://localhost:8080)
+
+</br>
+<img src="./img2_1.png" width="600px"></img>
+<img src="./img2_2.png" width="600px"></img>
+
+3. 채팅 방 참가
+
+</br>
+<img src="./img1_1.png" width="600px"></img>
+<img src="./img1_2.png" width="600px"></img>
+<img src="./img1_3.png" width="600px"></img>
+
 <!-- ROADMAP -->
 <!-- ## Roadmap
 

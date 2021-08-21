@@ -105,7 +105,7 @@ io.on('connection', (socket) => {
             console.log('false');
         }
         //Join alert
-
+        
 
     })
     socket.on('create_room', () => {
