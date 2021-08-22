@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
 
-
 const app = express();
 const httpServer = require('http').createServer(app);
 const httpChatServer = require('http').createServer(app);
@@ -13,10 +12,10 @@ const port2 = 3002;// chatserver port
 
 const io = require('socket.io')(httpChatServer, {
     cors: {
-        origin: "http://localhost:8080"
+        origin: "http://localhost:8080"//http://123.123.123.123:8080
     }
 });
-const jwt = require('jsonwebtoken');
+
 var USERLIST = [];
 var ROOMLIST = [];
 //var ROOMSECRET = '';
@@ -28,6 +27,41 @@ var ROOMLIST = [];
 //     console.log('POST');
 // })
 
+function deleteUserFromUserlist(participant) {
+    for(let i = 0; i < USERLIST.length; i++){
+        if(USERLIST[i].id == participant){
+            USERLIST.splice(i, 1);
+        }
+    }
+}
+function deleteUserFromRoomlist(participant) {
+    let i = 0;
+    while(i < ROOMLIST.length) {
+        //delete user from roomlist
+        if(ROOMLIST[i].roomparticipants.has(participant)){
+            ROOMLIST[i].roomparticipants.delete(participant);
+            //check is room empty
+            if(!ROOMLIST[i].roomparticipants.size){
+                console.log(ROOMLIST[i].roomcode, 'deleted');
+                ROOMLIST.splice(i, 1);
+            }else{
+                i++;
+            }
+        }
+        else{
+            i++;
+        }
+    }      
+}
+function addUserToRoomlist(roomsecret, participant) {
+    for(let i = 0; i < ROOMLIST.length; i++){
+        if(ROOMLIST[i].roomsecret == roomsecret){
+            ROOMLIST[i].roomparticipants.add(participant)
+            return true;
+        }
+    }
+    return false;
+}
 function findUsername(id) {
     for(let i = 0; i < USERLIST.length; i++){
         if(USERLIST[i].id == id){
@@ -46,6 +80,7 @@ function FindRoomSecret(roomn, roomp) {
     }
     return false;
 }
+
 app.use(express.static(path.join(__dirname, '../my-app/build')));
 app.use(function(req, res) {
     res.status(404).send('404 NOT FOUND');
@@ -92,17 +127,17 @@ io.on('connection', (socket) => {
         if(roomSecret) {
             socket.join(roomSecret);
             socket.emit('room', true);
-            
+            //Add a user to userlist
             USERLIST.push({
                 id: userId,
                 userName: userName
             });
-            
-            console.log('true');
+            //Add a user to roomlist
+            addUserToRoomlist(roomSecret, socket.id);
+            console.log('roomlist', ROOMLIST);
         }
         else{
             socket.emit('room', false);
-            console.log('false');
         }
         //Join alert
         
@@ -113,17 +148,22 @@ io.on('connection', (socket) => {
         const roomSecret = crypto.randomBytes(8).toString('hex');
         ROOMLIST.push({roomcode: roomCode, 
                        roompw: roomPassword, 
-                       roomsecret: roomSecret});
+                       roomsecret: roomSecret,
+                       roomparticipants: new Set()
+                    });
         console.log(ROOMLIST);
+        //Add a user to roomlist
+        addUserToRoomlist(roomSecret, socket.id);
         io.emit('create_room', roomCode, roomPassword);
     })
     socket.on('disconnect', () => {
-        //delete user
-        for(let i = 0; i < USERLIST.length; i++){
-            if(USERLIST[i].id == socket.id){
-                USERLIST.splice(i, 1);
-            }
-        }
+        //delete user from userlist
+        deleteUserFromUserlist(socket.id);
+        //delete user from roomlist
+        deleteUserFromRoomlist(socket.id);
+              
+
+        console.log('roomlist',ROOMLIST);
         console.log('user disconnect');
     })
 }); 

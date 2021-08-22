@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-const URL = "http://localhost:3002"
+const URL = "http://localhost:3002" //http://123.123.123.123:3002
 const socket = io(URL,{
     autoConnect: true
 });
