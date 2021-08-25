@@ -27,6 +27,14 @@ var ROOMLIST = [];
 //     console.log('POST');
 // })
 
+function getUserList(roomSecret){
+    for(let i = 0; i < ROOMLIST.length; i++) {
+        if(ROOMLIST[i].roomsecret == roomSecret){
+            return ROOMLIST[i].roomparticipants;
+        }
+    }
+    return false;
+}
 function deleteUserFromUserlist(participant) {
     for(let i = 0; i < USERLIST.length; i++){
         if(USERLIST[i].id == participant){
@@ -135,6 +143,13 @@ io.on('connection', (socket) => {
             //Add a user to roomlist
             addUserToRoomlist(roomSecret, socket.id);
             console.log('roomlist', ROOMLIST);
+
+            const user_list = Array.from(getUserList(roomSecret)).map((id) => {
+                return findUsername(id);
+            });
+            console.log(user_list.length)
+
+            io.to(roomSecret).emit('user_list', Array.from(user_list));
         }
         else{
             socket.emit('room', false);
@@ -154,7 +169,7 @@ io.on('connection', (socket) => {
         console.log(ROOMLIST);
         //Add a user to roomlist
         addUserToRoomlist(roomSecret, socket.id);
-        io.emit('create_room', roomCode, roomPassword);
+        io.to(socket.id).emit('create_room', roomCode, roomPassword);
     })
     socket.on('disconnect', () => {
         //delete user from userlist

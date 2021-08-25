@@ -11,11 +11,14 @@ import{
     Row,
     Tabs,
     Tab,
-    Alert
+    Alert,
+    ListGroup,
+    Card
 } from 'react-bootstrap'
+import CardHeader from 'react-bootstrap/esm/CardHeader';
 const crypto  = require('crypto');
 
-class ChatMain extends React.Component{
+class MessageArea extends React.Component{
   constructor(props){
     super(props);
     this.SubmitMessages = this.SubmitMessages.bind(this);
@@ -28,7 +31,8 @@ class ChatMain extends React.Component{
       this.setState((state) => {
         return { message_list: state.message_list.concat([msg_obj])};
       });
-      window.scrollTo(0, document.body.scrollHeight);
+      let obj = document.getElementById('imessage_box');
+      obj.scrollTop = obj.scrollHeight;
     });
   }
   
@@ -83,13 +87,14 @@ class ChatMain extends React.Component{
       }
   }
     return(
-      <div>
+      <div className="messages_wrapper">
         <div className="messages">
-          <div class="imessage">
+          <div id="imessage_box" class="imessage">
           {messageDisplay}
+    
           </div>
           <Form className="form" onSubmit={this.SubmitMessages}>
-            <InputGroup size="">
+            <InputGroup>
               <Form.Control type="text" value={this.state.msg} onChange={this.handleChange} autoComplete="off"/>
               <Button type="submit">Send</Button>
             </InputGroup>
@@ -99,5 +104,42 @@ class ChatMain extends React.Component{
     );
   }
 }
-
+class UserList extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = { user_list: []}
+  }
+  componentDidMount() {
+    socket.on('user_list', (userList) => {
+      this.setState({user_list: userList});
+    });
+  }
+  render(){
+    const renderedUserList = this.state.user_list.map((user) => {
+      return (<ListGroup.Item>{user}</ListGroup.Item>);
+    })
+    return(
+      <div className="user-list">
+        <Card>
+        <CardHeader>User List</CardHeader>
+        <div className="user-list-users">
+          <ListGroup>
+            {renderedUserList}
+          </ListGroup>
+        </div>
+        </Card>
+      </div>
+    );
+  }
+}
+class ChatMain extends React.Component{
+  render(){
+    return(
+      <div className="chat-main">
+        <UserList />
+        <MessageArea />
+      </div>
+    ); 
+  }
+}
 export default ChatMain;

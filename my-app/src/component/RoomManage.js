@@ -13,6 +13,7 @@ import{
     Alert
 } from 'react-bootstrap'
 import socket from '../socket'
+import ChatMain from './MainPage';
 
 class RoomCreate extends React.Component{
     constructor(props){
@@ -87,8 +88,8 @@ class RoomSelect extends React.Component{
     componentDidMount() {
         socket.on('room', (lgdin) => {
             this.setState({lgdin: lgdin});
-            if(this.state.lgdin)
-                this.props.roomSelecter(); 
+            // if(this.state.lgdin)
+            //     this.props.roomSelecter(); 
         });
        
     }
@@ -191,13 +192,16 @@ class RoomManage extends React.Component{
     }
     render(){
         return(
-            <div>
+            <div className="chat-app-wrapper">
                 <Tabs defaultActiveKey="Select_Room" id="RoomTabs" variant="tabs" className="mb-3">
-                    <Tab eventKey="Select_Room" title="Select Room">
+                    <Tab className="inheirt-height-wrapper" eventKey="Select_Room" title="Select Room">
                         <RoomSelect roomSelecter={this.props.roomSelecter}/>
                     </Tab>
                     <Tab eventKey="Create_Room" title="Create Room">
                         <RoomCreate />
+                    </Tab>
+                    <Tab eventKey="Chat_Main" title="Chat Room">
+                        <ChatMain />
                     </Tab>
                 </Tabs>
             </div>

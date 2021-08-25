@@ -1,20 +1,95 @@
-#form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-#input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 1rem; margin: 0.25rem; }
-#input:focus { outline: none; }
-#form > button { border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-
-#messages { list-style-type: none; margin: 0; padding: 0; word-break: break-all;  display: flex}
-
-
-#user_input {height: 440; justify-content: space-around;}
-Button:active Button:focus {
-  box-shadow: none;
+html{
+  height: 100%;
+  max-height: none;
+  max-width: none;
+}
+.container {
+  padding: 1rem;
+}
+div{
+  max-width: inherit;
+  max-height: inherit;
+}
+body {  
+  font-family: -apple-system, 
+    BlinkMacSystemFont, 
+    "Segoe UI", 
+    Roboto, 
+    Oxygen-Sans, 
+    Ubuntu, 
+    Cantarell, 
+    "Helvetica Neue", 
+    sans-serif;
+  font-weight: normal;
+  margin: 0;
+  max-height: 100%;
+  height: 100%;
+  width: 100%;
+}
+.chat-app-wrapper{
+  border-style: dotted;
+  width: 1000px;
+  height: 500px;
+}
+.pannel-wrapper{
+  height: inherit;
+}
+.tab-content{
+  height: calc(100% - 58px);
+}
+.tab-content::-webkit-scrollbar {
+  width: 5px;
+}
+.tab-content::-webkit-scrollbar-thumb{
+  background-color: #A8A8A8;
+  border-radius: 1rem;
+}
+#RoomTabs-tabpane-Chat_Main{
+  height: 100%;
 }
 
-Form.form{
+.chat-main {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 4px;
+}
+.user-list{
+  width: 300px;
+  height:100%;
+  margin-right: 5px;
+}
+.user-list-users{
+  overflow: auto;
+  height: 100%;
+}
+.user-list-users::-webkit-scrollbar {
+  width: 5px;
+}
+.user-list-users::-webkit-scrollbar-thumb{
+  background-color: #A8A8A8;
+  border-radius: 1rem;
+}
+.messages_wrapper{
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  flex-direction: row;
+  height: 100%;
+  width: calc(100% - 300px);
+}
+.messages{
+  height: 100%;
+  width: 100%;
+}
+.form{
   background-color: whitesmoke;
+  width: 100%;
   padding: 0.5rem 1rem ;
-  position: fixed;
+  position: relative;
   bottom: 0; left: 0; right: 0;
   backdrop-filter: blur(10px);
   display: inline-flex;
@@ -29,15 +104,25 @@ Form.form{
 .imessage {
   background-color: #fff;
   border: 0px solid #e5e5ea;
+  margin-left: 0;
+  margin-right: 0px;
+  width: 100%;
+  height: calc(100% - 54px);
   display: flex;
   flex-direction: column;
   font-family: "SanFrancisco";
   font-size: 1.25rem;
-  margin-bottom: 54px;
+  overflow: auto;
   padding: 0.5rem 1.5rem;
   box-sizing: border-box;
 }
-
+.imessage::-webkit-scrollbar {
+  width: 5px;
+}
+.imessage::-webkit-scrollbar-thumb{
+  background-color: #A8A8A8;
+  border-radius: 1rem;
+}
 .imessage p {
   border-radius: 1.15rem;
   line-height: 1.25;
@@ -160,25 +245,7 @@ p[class^="from-"].emoji::before {
     url("https://cdn.rawgit.com/AllThingsSmitty/fonts/25983b71/SanFrancisco/sanfranciscodisplay-regular-webfont.woff") format("woff");
 }
 
-body {  
-  font-family: -apple-system, 
-    BlinkMacSystemFont, 
-    "Segoe UI", 
-    Roboto, 
-    Oxygen-Sans, 
-    Ubuntu, 
-    Cantarell, 
-    "Helvetica Neue", 
-    sans-serif;
-  font-weight: normal;
-  margin: 0;
-}
 
-.container {
-  margin: 0 auto;
-  max-width: 600px;
-  padding: 1rem;
-}
 
 .comment {
   color: #222;
@@ -187,25 +254,4 @@ body {
   margin-bottom: 1.25rem;
   max-width: 100%;
   padding: 0;
-}
-
-@media screen and (max-width: 800px) {
-  body {
-    margin: 0 0.5rem;
-  }
-
-  .container {
-    padding: 0.5rem;
-  }
-
-  .imessage {
-    font-size: 1.05rem;
-    margin: 0 auto 1rem;
-    max-width: 600px;
-    padding: 0.25rem 0.875rem;
-  }
-
-  .imessage p {
-    margin: 0.5rem 0;
-  }
 }
