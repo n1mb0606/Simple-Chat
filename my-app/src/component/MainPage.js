@@ -1,5 +1,4 @@
 import React from 'react';
-import socket from '../socket'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import{ 
     Button,
@@ -16,6 +15,7 @@ import{
     Card
 } from 'react-bootstrap'
 import CardHeader from 'react-bootstrap/esm/CardHeader';
+import socket from '../socket';
 const crypto  = require('crypto');
 
 class MessageArea extends React.Component{
