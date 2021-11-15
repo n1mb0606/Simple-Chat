@@ -4,16 +4,16 @@ const { Pool } = require('pg')
 
 const poolUser = new Pool({
     user: 'postgres', 
-    host: 'localhost',
+    host: '172.18.0.2',
     database: 'postgres',
-    password: '',
+    password: '123',
     port: 5432 //db port
 })
 const poolRoom = new Pool({
     user: 'postgres', 
-    host: 'localhost',
+    host: '172.18.0.3',
     database: 'postgres',
-    password: '',
+    password: '123',
     port: 5432 //db port
 })
 const crypto = require('crypto');
@@ -43,7 +43,6 @@ async function getUserList(roomSecret){
     //pool.end()
 }
 function deleteUserFromUserlist(participant) {
-    console.log('fuck')
     const query={
         text: "DELETE FROM userList WHERE id='"+participant+"'"
     }
@@ -130,7 +129,7 @@ async function findUsernames(id_array) {
         console.log(id_array[i])
         queries += ("SELECT name FROM userList WHERE id='"+id_array[i]+"';")
     }
-    console.log('q',queries)
+    
     const query={
         text: queries
     }
@@ -165,7 +164,8 @@ async function roomCreate(roomCode, roomPassword, roomSecret){
     query={
         text: "INSERT INTO roomList VALUES('"+roomCode+"','"+roomPassword+"','"+roomSecret+"')"
     }
-    await poolRoom.query(query)
+    var test = await poolRoom.query(query)
+	
 }
 
 io.on('connection', (socket) => {
@@ -202,7 +202,7 @@ io.on('connection', (socket) => {
         const roomPassword = user_obj.roompw;
         
         //Check the room password 
-        console.log('ss',roomCode,roomPassword)   
+           
         FindRoomSecret(roomCode,roomPassword).then((roomSecret)=>{
             if(roomSecret) {
                 socket.join(roomSecret);
@@ -248,3 +248,5 @@ io.on('connection', (socket) => {
 httpChatServer.listen(port, ()=> {
     console.log(`httpChatServer listening on *:${port}`);
 })
+
+
