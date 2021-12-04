@@ -3,7 +3,7 @@ const path = require('path');
 
 const app = express();
 const httpServer = require('http').createServer(app);
-const port = 8080;// httpserver port
+const port = 80;// httpserver port
 
 app.use(express.static(path.join(__dirname, './build')));
 app.use(function(req, res) {
