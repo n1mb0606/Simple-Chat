@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { Pool } = require('pg')
-const cors_url = process.env.SIMPLE_CHAT_CORS == undefined ? 'localhost' : process.env.SIMPLE_CHAT_CORS
+const cors_url = process.env.SIMPLE_CHAT_CORS == undefined ? 'http://localhost:8080' : process.env.SIMPLE_CHAT_CORS
 const poolUser = new Pool({
     user: 'postgres', 
     host: '172.18.0.2',
