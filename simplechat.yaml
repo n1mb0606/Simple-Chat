@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: simplechat-webserver
+    labels:
+        app: simplechat-webserver
+        release: webserver
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simplechat-webserver
+            release: webserver
+    template:
+        metadata:
+            labels:
+                app: simplechat-webserver
+                release: webserver
+        spec:
+            containers:
+            - name: simplechat-server
+              image: n1mb0606/k8s_simplechat_webserver
+              ports:
+              - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: simplechat-chatserver
+    labels:
+        app: simplechat-chatserver
+        release: chatserver
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simplechat-chatserver
+            release: chatserver
+    template:
+        metadata:
+            labels:
+                app: simplechat-chatserver
+                release: chatserver
+        spec:
+            containers:
+            - name: simplechat-chatserver
+              image: n1mb0606/k8s_simplechat_chatserver
+              ports:
+              - containerPort: 3002
+              env:
+              - name: SIMPLE_CHAT_CORS
+                value: #http://x.x.x.x:30080 minikube ip
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: simplechat-userdb
+    labels:
+        app: simplechat-userdb
+        release: userdb
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simplechat-userdb
+            release: userdb
+    template:
+        metadata:
+            labels:
+                app: simplechat-userdb
+                release: userdb
+        spec:
+            containers:
+            - name: simplechat-userdb
+              image: n1mb0606/k8s_simplechat_userdb
+              ports:
+              - containerPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: simplechat-roomdb
+    labels:
+        app: simplechat-roomdb
+        release: roomdb
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simplechat-roomdb
+            release: roomdb 
+    template:
+        metadata:
+            labels:
+                app: simplechat-roomdb
+                release: roomdb
+        spec:
+            containers:
+            - name: simplechat-roomdb
+              image: n1mb0606/k8s_simplechat_roomdb
+              ports:
+              - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simplechat-webserver
+spec:
+  selector:
+    app: simplechat-webserver
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30080
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simplechat-chatserver
+spec:
+  selector:
+    app: simplechat-chatserver
+  ports:
+  - protocol: TCP
+    port: 3002
+    nodePort: 30002
+  type: NodePort 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simplechat-userdb
+spec:
+  selector:
+    app: simplechat-userdb
+  ports:
+  - protocol: TCP
+    port: 5432
+  type: NodePort 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simplechat-roomdb
+spec:
+  selector:
+    app: simplechat-roomdb
+  ports:
+  - protocol: TCP
+    port: 5432
+  type: NodePort 
